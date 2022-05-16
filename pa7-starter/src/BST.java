@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
 
@@ -16,50 +17,101 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	 * or any other implementation of a binary search tree
 	 */
 
+	Node<K, V> node; 
+	Comparator<K> comparator;
+	int size;
+
+	/**
+	 * Adds the specified key, value pair to this DefaultMap
+	 * Note: duplicate keys are not allowed
+	 * 
+	 * @return true if the key value pair was added to this DefaultMap
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public boolean put(K key, V value) throws IllegalArgumentException {
+		if (key == null) { throw new IllegalAccessError(); }
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * Replaces the value that maps to the key if it is present
+	 * 
+	 * @param key      The key whose mapped value is being replaced
+	 * @param newValue The value to replace the existing value with
+	 * @return true if the key was in this DefaultMap
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public boolean replace(K key, V newValue) throws IllegalArgumentException {
+		if (key == null) { throw new IllegalAccessError(); }
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * Remove the entry corresponding to the given key
+	 * 
+	 * @return true if an entry for the given key was removed
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public boolean remove(K key) throws IllegalArgumentException {
+		if (key == null) { throw new IllegalAccessError(); }
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * Adds the key, value pair to this DefaultMap if it is not present,
+	 * otherwise, replaces the value with the given value
+	 * 
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public void set(K key, V value) throws IllegalArgumentException {
+		if (key == null) { throw new IllegalAccessError(); }
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * @return the value corresponding to the specified key
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public V get(K key) throws IllegalArgumentException {
+		if (key == null) { throw new IllegalAccessError(); }
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * 
+	 * @return The number of (key, value) pairs in this DefaultMap
+	 */
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.size;
 	}
 
+	/**
+	 * 
+	 * @return true iff this.size() == 0 is true
+	 */
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.size == 0;
 	}
 
+	/**
+	 * @return true if the specified key is in this DefaultMap
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public boolean containsKey(K key) throws IllegalArgumentException {
+		if (key == null) { throw new IllegalAccessError(); }
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -67,33 +119,49 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	// Keys must be in ascending sorted order
 	// You CANNOT use Collections.sort() or any other sorting implementations
 	// You must do inorder traversal of the tree
+	/**
+	 * 
+	 * @return an array containing the keys of this DefaultMap. If this DefaultMap
+	 *         is
+	 *         empty, returns array of length zero.
+	 */
 	@Override
 	public List<K> keys() {
-		// TODO Auto-generated method stub
+		ArrayList<K> listOfKeyKs = new ArrayList<>();
 		return null;
 	}
 	
 	private static class Node<K extends Comparable<? super K>, V> 
 								implements DefaultMap.Entry<K, V> {
-		/* 
-		 * TODO: Add instance variables
-		 */
+		K key;
+		V value;
 
+		/**
+		 * 
+		 * @return The key of this node.
+		 */
 		@Override
 		public K getKey() {
-			// TODO Auto-generated method stub
-			return null;
+			return this.key;
 		}
 
+		/**
+		 * 
+		 * @return The value of this node.
+		 */
 		@Override
 		public V getValue() {
-			// TODO Auto-generated method stub
-			return null;
+			return this.value;
 		}
 
+		/**
+		 * Sets a new value to the node.
+		 * 
+		 * @param value new value of this node
+		 */
 		@Override
 		public void setValue(V value) {
-			// TODO Auto-generated method stub
+			this.value = value;
 			
 		}
 		
