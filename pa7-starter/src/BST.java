@@ -17,9 +17,21 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	 * or any other implementation of a binary search tree
 	 */
 
-	Node<K, V> node; 
-	Comparator<K> comparator;
+	Node<K, V> root;
 	int size;
+
+	// TODO: add header
+	final Comparator<K> COMPARATOR = new Comparator<K>() {
+
+		@Override
+		public int compare(K o1, K o2) {
+			o1.compareTo(o2);
+			return o1.compareTo(o2);
+		}
+		
+	};
+
+	// TODO: add constructor method
 
 	/**
 	 * Adds the specified key, value pair to this DefaultMap
@@ -30,8 +42,29 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	 */
 	@Override
 	public boolean put(K key, V value) throws IllegalArgumentException {
-		if (key == null) { throw new IllegalAccessError(); }
-		// TODO Auto-generated method stub
+		if (key == null) { 
+			throw new IllegalAccessError();
+		}
+
+		return this.put(this.root, key, value);
+	}
+
+	private boolean put(Node<K,V> node,K key, V value){
+		if (node == null) {
+			this.size++;
+			node = new Node<>(key, value);
+			return true;
+		}
+
+		int comp = this.COMPARATOR.compare(node.key,key);
+
+		if(comp < 0) {
+			return this.put(node.right, key, value);
+		} else if (comp > 0) {
+			return this.put(node.left, key, value);
+		} 
+
+
 		return false;
 	}
 
@@ -135,6 +168,14 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 								implements DefaultMap.Entry<K, V> {
 		K key;
 		V value;
+
+		Node<K, V> left;
+		Node<K, V> right;
+
+		public Node(K key, V value) {
+			this.key = key;
+			this.value = value;
+		}
 
 		/**
 		 * 
