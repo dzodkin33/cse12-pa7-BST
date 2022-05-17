@@ -60,7 +60,6 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	}
 
 
-	// ! IM GOING FUCKING INSANE
 	/**
 	 * This is a helper method that is used recursively and adds
 	 * a new key value pair to this BTS starting from the a certain node.
@@ -69,7 +68,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	 * @param key   a key of the new entry.
 	 * @param value a value of the new entry.
 	 * 
-	 * @return true if the key value pair was added to this BST
+	 * @return returns a new root type Node if successful
 	 */
 	private Node<K, V> put(Node<K,V> node,K key, V value){
 		if (node == null) {
@@ -127,13 +126,45 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	}
 
 	/**
-	 * @return the value corresponding to the specified key
+	 * @return the value corresponding to the specified key,
+	 * 			null if didn't find value
 	 * @throws IllegalArgumentException if the key is null
 	 */
 	@Override
 	public V get(K key) throws IllegalArgumentException {
 		if (key == null) { throw new IllegalAccessError(); }
-		// TODO Auto-generated method stub
+		Node<K, V> recursiveResult = this.get(this.root, key);
+		
+		if(recursiveResult != null) {
+			return recursiveResult.getValue();
+		}
+		return null;
+	}
+
+	/**
+	 * This is a recursive helper method that returns a
+	 * node with a given key.
+	 * 
+	 * @param node a starter node from which recursion starts
+	 * @param key a desired key
+	 * @return a node with a given key, otherwise null
+	 */
+	private Node<K, V> get(Node<K, V> node, K key) {
+		if(node == null) {
+			return null;
+		}
+		if(node.getKey() == key) {
+			return node;
+		}
+
+		int comp = this.COMPARATOR.compare(node.key,key);
+
+		if(comp > 0) {
+			return this.get(node.left, key);
+		} else if (comp < 0){
+			return this.get(node.right, key);
+		}
+
 		return null;
 	}
 
