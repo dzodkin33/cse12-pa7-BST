@@ -23,7 +23,7 @@ public class BSTTest {
 		assertNotNull(testTree);
 	}
 	
-
+	// !Testing put method! //
 	@Test
 	public void testPut() {
 		int expectedSize = 1;
@@ -52,4 +52,42 @@ public class BSTTest {
 	// 	assertThrows(testTree.put(null, 2).compareTo())
 
 	// }
+
+	// !Testing isEmpty method! //
+	@Test
+	public void testIsEmptyEmpty(){
+		assertTrue(testTree.isEmpty());
+	}
+	
+	@Test
+	public void testIsEmptyNotEmpty() {
+		testTree.put(1, 1);
+		assertFalse(testTree.isEmpty());
+	}
+
+	// !Testing get() method! //
+	@Test 
+	public void testGet() {
+		testTree.put(1, 2);
+		Integer expected = 2;
+		assertEquals(expected, testTree.get(1));
+	}
+
+	@Test
+	public void testGetNonExistent() {
+		testTree.put(1, 2);
+
+		assertNull(testTree.get(2));
+	}
+
+	@Test
+	public void testGetEmptyTree() {
+		assertNull(testTree.get(2));
+	}
+
+	@Test
+	public void testGetNullValue() {
+		testTree.put(1, null);
+		assertNull(testTree.get(1));
+	}
 }
