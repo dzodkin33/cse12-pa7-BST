@@ -34,10 +34,13 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	// TODO: add constructor method
 
 	/**
-	 * Adds the specified key, value pair to this DefaultMap
+	 * Adds the specified key, value pair to this BST
 	 * Note: duplicate keys are not allowed
 	 * 
-	 * @return true if the key value pair was added to this DefaultMap
+	 * @param  key a key of the new entry.
+	 * @param value a value of the new entry.
+	 * 
+	 * @return true if the key value pair was added to this BST
 	 * @throws IllegalArgumentException if the key is null
 	 */
 	@Override
@@ -46,26 +49,51 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 			throw new IllegalAccessError();
 		}
 
-		return this.put(this.root, key, value);
+		Node<K, V> recursiveResult = this.put(this.root, key, value);
+		if (recursiveResult == null) {
+			return false;
+		} else {
+			this.root = recursiveResult;
+			return true;
+		}
+		
 	}
 
-	private boolean put(Node<K,V> node,K key, V value){
+
+	// ! IM GOING FUCKING INSANE
+	/**
+	 * This is a helper method that is used recursively and adds
+	 * a new key value pair to this BTS starting from the a certain node.
+	 * 
+	 * @param node  a starting node of a recursion.
+	 * @param key   a key of the new entry.
+	 * @param value a value of the new entry.
+	 * 
+	 * @return true if the key value pair was added to this BST
+	 */
+	private Node<K, V> put(Node<K,V> node,K key, V value){
 		if (node == null) {
 			this.size++;
 			node = new Node<>(key, value);
-			return true;
+			return node;
 		}
 
 		int comp = this.COMPARATOR.compare(node.key,key);
 
+		if(comp == 0) {
+			return null;
+		}
+
 		if(comp < 0) {
-			return this.put(node.right, key, value);
+			node.right = this.put(node.right, key, value);
+			return node.right;
 		} else if (comp > 0) {
-			return this.put(node.left, key, value);
-		} 
+			node.left = this.put(node.right, key, value);
+			return node.left;
+		}
 
+		return null;
 
-		return false;
 	}
 
 	/**
@@ -83,25 +111,14 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		return false;
 	}
 
-	/**
-	 * Remove the entry corresponding to the given key
-	 * 
-	 * @return true if an entry for the given key was removed
-	 * @throws IllegalArgumentException if the key is null
-	 */
+	//TODO: add header
 	@Override
 	public boolean remove(K key) throws IllegalArgumentException {
 		if (key == null) { throw new IllegalAccessError(); }
-		// TODO Auto-generated method stub
 		return false;
 	}
 
-	/**
-	 * Adds the key, value pair to this DefaultMap if it is not present,
-	 * otherwise, replaces the value with the given value
-	 * 
-	 * @throws IllegalArgumentException if the key is null
-	 */
+	// TODO: add header
 	@Override
 	public void set(K key, V value) throws IllegalArgumentException {
 		if (key == null) { throw new IllegalAccessError(); }
