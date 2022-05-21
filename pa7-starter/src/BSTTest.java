@@ -90,4 +90,51 @@ public class BSTTest {
 		testTree.put(1, null);
 		assertNull(testTree.get(1));
 	}
+
+	// !Testing replace() method! // 
+	@Test
+	public void testReplace() {
+		testTree.put(1, 2);
+		testTree.replace(1, 3);
+
+		Integer expected = 3;
+
+		assertEquals(expected, testTree.get(1));
+	}
+
+	@Test
+	public void testReplaceBigTree() {
+
+		testTree.put(1, 2);
+		testTree.put(2, 1);
+		testTree.put(3, 4);
+		testTree.replace(2, 3);
+
+		Integer expected = 3;
+
+		assertEquals(expected, testTree.get(2));
+	}
+
+	@Test
+	public void testReplaceNonExistent() {
+		testTree.put(1, 2);
+		assertFalse(testTree.replace(2, 3));
+	}
+
+
+	// !Test containsKey() method!//
+	@Test
+	public void testContainsKeyTrue(){
+		testTree.put(1, 2);
+
+		assertTrue(testTree.containsKey(1));
+	}
+
+	@Test
+	public void testContainsKeyFalse() {
+		testTree.put(1, 2);
+
+		assertFalse(testTree.containsKey(2));
+	}
+
 }

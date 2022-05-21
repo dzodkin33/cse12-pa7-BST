@@ -106,8 +106,46 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	@Override
 	public boolean replace(K key, V newValue) throws IllegalArgumentException {
 		if (key == null) { throw new IllegalAccessError(); }
-		// TODO Auto-generated method stub
-		return false;
+
+		Node<K, V> recursiveResult = this.replace(this.root, key, newValue);
+
+		if(!this.containsKey(key)) {
+			return false;
+		}
+		// ! FUUCK
+		if (recursiveResult == null) {
+			return false;
+		} else {
+			this.root = recursiveResult;
+			return true;
+		}
+	}
+
+	// TODO: add header
+	private Node<K, V> replace(Node<K,V> node, K key, V newValue) {
+
+		if (node == null) {
+			return null;
+		}
+
+		int comp = this.COMPARATOR.compare(node.key, key);
+
+		if (comp == 0) {
+			node.setValue(newValue);
+			return node;
+		}
+
+		if (comp < 0) {
+			node.right = this.put(node.right, key, newValue);
+			return node.right;
+		} else if (comp > 0) {
+			node.left = this.put(node.right, key, newValue);
+			return node.left;
+		}
+
+
+
+		return null;
 	}
 
 	//TODO: add header
@@ -193,9 +231,34 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	@Override
 	public boolean containsKey(K key) throws IllegalArgumentException {
 		if (key == null) { throw new IllegalAccessError(); }
-		// TODO Auto-generated method stub
-		return false;
+
+
+		return this.containsKey(this.root, key);
 	}
+
+
+	// TODO: add header
+	public boolean containsKey(Node<K, V> node, K key) {
+		if (node == null) {
+			return false;
+		}
+
+		int comp = this.COMPARATOR.compare(node.key, key);
+
+		if (comp == 0) {
+			return true;
+		}
+
+		if (comp < 0) {
+			return this.containsKey(node.left, key);
+		} else if (comp > 0) {
+			return this.containsKey(node.right, key);
+		}
+
+		return false;
+
+	}
+
 
 	// Keys must be in ascending sorted order
 	// You CANNOT use Collections.sort() or any other sorting implementations
