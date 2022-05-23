@@ -121,7 +121,15 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		}
 	}
 
-	// TODO: add header
+	/**
+	 * This is a private recursive helper method that helps replacing the 
+	 * value on a given key.
+	 * 
+	 * @param node 	a starting node of a recursion.
+	 * @param key      The key whose mapped value is being replaced
+	 * @param newValue The value to replace the existing value with
+	 * @return returns a new front node.
+	 */
 	private Node<K, V> replace(Node<K,V> node, K key, V newValue) {
 
 		if (node == null) {
@@ -155,7 +163,17 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		return false;
 	}
 
-	// TODO: add header
+	/**
+	 * Adds the key, value pair to this BST if it is not present,
+	 * otherwise, replaces the value with the given value.
+	 * 
+	 * @param key   a key of a new entry.
+	 * @param value a value of a new entry.
+	 * 
+	 * 
+	 * 
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public void set(K key, V value) throws IllegalArgumentException {
 		if (key == null) { throw new IllegalAccessError(); }
@@ -165,9 +183,16 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	}
 
 	/**
-	 * Adds the key, value pair to this DefaultMap if it is not present,
-	 * otherwise, replaces the value with the given value
-	 * @throws IllegalArgumentException if the key is null
+	 * This a private recursive helper method for set method().
+	 * It 
+	 * 
+	 * @param node
+	 * @param key   a key of a new entry.
+	 * @param value a value of a new entry.
+	 * 
+	 * 
+	 * 
+	 * @return returns a new front node
 	 */
 	private Node<K, V> set(Node<K, V> node, K key, V value) {
 		if (node == null) {
@@ -251,7 +276,11 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	}
 
 	/**
-	 * @return true if the specified key is in this DefaultMap
+	 * This method determines if a key is present in a BST. 
+	 * 
+	 * @param key - a key this method searches for.
+	 * 
+	 * @return true if the specified key is in this BST.
 	 * @throws IllegalArgumentException if the key is null
 	 */
 	@Override
@@ -262,7 +291,16 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		return this.containsKey(this.root, key);
 	}
 
-	// TODO: add header
+	/**
+	 * This is a private helper method for the containsKey()
+	 * method. It uses the recursion. 
+	 * 
+	 * @param node - the node from which recursion starts.
+	 * @param key - a key we are searching for.
+	 * 
+	 * @return true if the specified key is in this map, 
+	 * 			otherwise false
+	 */
 	public boolean containsKey(Node<K, V> node, K key) {
 		if (node == null) {
 			return false;
