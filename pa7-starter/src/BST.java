@@ -18,7 +18,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	 */
 
 	Node<K, V> root;
-	int size;
+	int size;   
 
 	// TODO: add header
 	final Comparator<K> COMPARATOR = new Comparator<K>() {
@@ -112,7 +112,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		if(!this.containsKey(key)) {
 			return false;
 		}
-		// ! FUUCK
+
 		if (recursiveResult == null) {
 			return false;
 		} else {
@@ -136,10 +136,10 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		}
 
 		if (comp < 0) {
-			node.right = this.put(node.right, key, newValue);
+			node.right = this.replace(node.right, key, newValue);
 			return node.right;
 		} else if (comp > 0) {
-			node.left = this.put(node.right, key, newValue);
+			node.left = this.replace(node.right, key, newValue);
 			return node.left;
 		}
 
@@ -159,8 +159,34 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	@Override
 	public void set(K key, V value) throws IllegalArgumentException {
 		if (key == null) { throw new IllegalAccessError(); }
-		// TODO Auto-generated method stub
+
+		this.root = this.set(this.root, key, value);
 		
+	}
+
+	/**
+	 * Adds the key, value pair to this DefaultMap if it is not present,
+	 * otherwise, replaces the value with the given value
+	 * @throws IllegalArgumentException if the key is null
+	 */
+	private Node<K, V> set(Node<K, V> node, K key, V value) {
+		if (node == null) {
+			this.size++;
+			return new Node<K, V>(key, value);
+		}
+
+		int comp = this.COMPARATOR.compare(node.key, key);
+
+		if (comp < 0) {
+			node.right = this.set(node.right, key, value);
+			return node.right;
+		} else if (comp > 0) {
+			node.left = this.set(node.right, key, value);
+			return node.left;
+		} else {
+			node.setValue(value);
+			return node;
+		}
 	}
 
 	/**
@@ -235,7 +261,6 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 
 		return this.containsKey(this.root, key);
 	}
-
 
 	// TODO: add header
 	public boolean containsKey(Node<K, V> node, K key) {
