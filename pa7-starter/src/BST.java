@@ -1,7 +1,10 @@
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Stack;
+
+import javax.xml.namespace.QName;
 
 /**
  * @param <K> The type of the keys of this BST. They need to be comparable by nature of the BST
@@ -17,7 +20,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	 * or any other implementation of a binary search tree
 	 */
 
-	Node<K, V> root;
+	public Node<K, V> root;
 	int size;   
 
 	// TODO: add header
@@ -73,8 +76,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	private Node<K, V> put(Node<K,V> node,K key, V value){
 		if (node == null) {
 			this.size++;
-			node = new Node<>(key, value);
-			return node;
+			return new Node<>(key, value, null, null);
 		}
 
 		int comp = this.COMPARATOR.compare(node.key,key);
@@ -85,10 +87,10 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 
 		if(comp < 0) {
 			node.right = this.put(node.right, key, value);
-			return node.right;
+			return node;
 		} else if (comp > 0) {
 			node.left = this.put(node.right, key, value);
-			return node.left;
+			return node;
 		}
 
 		return null;
@@ -145,10 +147,10 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 
 		if (comp < 0) {
 			node.right = this.replace(node.right, key, newValue);
-			return node.right;
+			return node;
 		} else if (comp > 0) {
 			node.left = this.replace(node.right, key, newValue);
-			return node.left;
+			return node;
 		}
 
 
@@ -160,7 +162,72 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	@Override
 	public boolean remove(K key) throws IllegalArgumentException {
 		if (key == null) { throw new IllegalAccessError(); }
-		return false;
+		if (!this.containsKey(key)) {
+			return false;
+		} else {
+			this.removeRecursively(key);
+			return true;
+		}
+	}
+
+
+	// TODO: add header
+	private Node<K, V> remove(Node<K, V> node, K key) {
+
+		if (node == null) {
+			return null;
+		}
+
+		int comp = this.COMPARATOR.compare(node.key, key);
+
+		if (comp > 0) {
+			node.left = this.remove(node.left, key);
+		} else if (comp < 0) {
+			node.right = this.remove(node.right, key);
+		} else {
+
+			this.size--;
+			// Case: node with only one child or no children
+			if (node.left == null) {
+				return node.right;
+			} else if (node.right == null) {
+				return node.left;
+			}
+
+			// Case: node with two children
+			// Get minimum from right subtree, then remove it
+			Node<K, V> nextLargest = nodeWithMinimumKey(node.right);
+			node.key = nextLargest.key;
+			node.value = nextLargest.value;
+
+			// Remove nextLargest node
+			node.right = this.remove(node.right, node.key);
+		}
+
+		return node;
+	}
+
+
+
+	// TODO: write a header
+	Node<K, V> nodeWithMinimumKey(Node<K, V> root) {
+		Node<K, V> minimum = this.root;
+		while (this.root.left != null) {
+			minimum = this.root.left;
+			this.root = this.root.left;
+		}
+		return minimum;
+	}
+
+
+	// TODO: add header
+	// This calls the above method to recursively remove a key. If the number of
+	// keys in the map afterwards is the same, we did not find our key, so we
+	// throw a NoSuchElementException. Otherwise, we decrement the size of the map.
+	public void removeRecursively(K keyToRemove) {
+		this.root = this.remove(this.root, keyToRemove);
+		
+		this.size--;
 	}
 
 	/**
@@ -197,17 +264,17 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	private Node<K, V> set(Node<K, V> node, K key, V value) {
 		if (node == null) {
 			this.size++;
-			return new Node<K, V>(key, value);
+			return new Node<K, V>(key, value, null, null);
 		}
 
 		int comp = this.COMPARATOR.compare(node.key, key);
 
 		if (comp < 0) {
 			node.right = this.set(node.right, key, value);
-			return node.right;
+			return node;
 		} else if (comp > 0) {
 			node.left = this.set(node.right, key, value);
-			return node.left;
+			return node;
 		} else {
 			node.setValue(value);
 			return node;
@@ -335,10 +402,23 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	@Override
 	public List<K> keys() {
 		ArrayList<K> listOfKeyKs = new ArrayList<>();
-		return null;
+		this.addKeys(this.root, listOfKeyKs);
+		return listOfKeyKs;
+	}
+
+	// TODO: add header
+	private void addKeys(Node<K, V>node, List<K> listOfKeyKs) {
+		if (node == null) {
+			return;
+		}
+
+		this.addKeys(node.left, listOfKeyKs);
+		listOfKeyKs.add(node.key);
+		this.addKeys(node.right, listOfKeyKs);
+
 	}
 	
-	private static class Node<K extends Comparable<? super K>, V> 
+	static class Node<K extends Comparable<? super K>, V> 
 								implements DefaultMap.Entry<K, V> {
 		K key;
 		V value;
@@ -346,9 +426,11 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		Node<K, V> left;
 		Node<K, V> right;
 
-		public Node(K key, V value) {
+		public Node(K key, V value, Node<K, V> left, Node<K, V> right) {
 			this.key = key;
 			this.value = value;
+			this.right = right;
+			this.left = left;
 		}
 
 		/**

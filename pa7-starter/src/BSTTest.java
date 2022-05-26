@@ -43,7 +43,10 @@ public class BSTTest {
 
 	@Test 
 	public void testPutCorrectPlacement() {
+		testTree.set(1, 1);
+		testTree.put(4, 2);
 
+		System.out.println(testTree.root.getValue());
 	}
 	// ! Finish testing exception
 	// @Test 
@@ -122,7 +125,7 @@ public class BSTTest {
 	}
 
 
-	// !Test containsKey() method!//
+	// !Test containsKey() method! //
 	@Test
 	public void testContainsKeyTrue(){
 		testTree.put(1, 2);
@@ -137,4 +140,20 @@ public class BSTTest {
 		assertFalse(testTree.containsKey(2));
 	}
 
+	// !Test remove() method! //
+
+	@Test 
+	public void testGetKeys() {
+		testTree.put(1, 2);
+		testTree.put(2, 2);
+		testTree.put(3, 2);
+		testTree.put(6, 2);
+		
+
+		List<Integer> list = testTree.keys();
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i));
+			System.out.println(list.size());
+		}
+	}
 }
