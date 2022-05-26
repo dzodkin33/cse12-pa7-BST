@@ -1,10 +1,8 @@
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Stack;
 
-import javax.xml.namespace.QName;
+
 
 /**
  * @param <K> The type of the keys of this BST. They need to be comparable by nature of the BST
@@ -23,18 +21,24 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	public Node<K, V> root;
 	int size;   
 
-	// TODO: add header
 	final Comparator<K> COMPARATOR = new Comparator<K>() {
 
+		/**
+		 * This is an implimentation of Comparator interface.
+		 */
 		@Override
 		public int compare(K o1, K o2) {
-			o1.compareTo(o2);
 			return o1.compareTo(o2);
 		}
 		
 	};
 
-	// TODO: add constructor method
+	/**
+	 * This is a constructor method that initializes a BST with a starting size 0.
+	 */
+	public BST() {
+		this.size = 0;
+	}
 
 	/**
 	 * Adds the specified key, value pair to this BST
@@ -158,20 +162,37 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		return null;
 	}
 
-	//TODO: add header
+	/**
+	 * This is a method that removes a node with a given key using a recursive
+	 * method remove
+	 * 
+	 * @param key The key of a node that will be removed
+	 * @return returns true if node was removed, otherwise false
+	 * 
+	 * @throws IllegalArgumentException if key is null
+	 */
 	@Override
 	public boolean remove(K key) throws IllegalArgumentException {
 		if (key == null) { throw new IllegalAccessError(); }
 		if (!this.containsKey(key)) {
 			return false;
 		} else {
-			this.removeRecursively(key);
+			this.root = this.remove(this.root, key);
+			this.size--;
 			return true;
 		}
 	}
 
 
-	// TODO: add header
+	/**
+	 * This is a private recursive helper method that finds and removes the value 
+	 * with a given key as well as rearanges the BST so that it would account for 
+	 * the removal of a node.
+	 * 
+	 * @param node     a starting node of a recursion.
+	 * @param key      The key whose mapped value is being replaced
+	 * @return returns a new root node if a node was removed, otherwise null.
+	 */
 	private Node<K, V> remove(Node<K, V> node, K key) {
 
 		if (node == null) {
@@ -186,7 +207,6 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 			node.right = this.remove(node.right, key);
 		} else {
 
-			this.size--;
 			// Case: node with only one child or no children
 			if (node.left == null) {
 				return node.right;
@@ -209,7 +229,14 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 
 
 
-	// TODO: write a header
+	/**
+	 * This is a private helper method that finds a node with a smallest key 
+	 * in BST.
+	 * 
+	 * @param root     a starting node of a recursion.
+
+	 * @return returns a node with a minimum key.
+	 */
 	Node<K, V> nodeWithMinimumKey(Node<K, V> root) {
 		Node<K, V> minimum = this.root;
 		while (this.root.left != null) {
@@ -219,16 +246,6 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		return minimum;
 	}
 
-
-	// TODO: add header
-	// This calls the above method to recursively remove a key. If the number of
-	// keys in the map afterwards is the same, we did not find our key, so we
-	// throw a NoSuchElementException. Otherwise, we decrement the size of the map.
-	public void removeRecursively(K keyToRemove) {
-		this.root = this.remove(this.root, keyToRemove);
-		
-		this.size--;
-	}
 
 	/**
 	 * Adds the key, value pair to this BST if it is not present,
@@ -335,7 +352,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 
 	/**
 	 * 
-	 * @return true iff this.size() == 0 is true
+	 * @return true if this.size() == 0 is true
 	 */
 	@Override
 	public boolean isEmpty() {
@@ -355,38 +372,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		if (key == null) { throw new IllegalAccessError(); }
 
 
-		return this.containsKey(this.root, key);
-	}
-
-	/**
-	 * This is a private helper method for the containsKey()
-	 * method. It uses the recursion. 
-	 * 
-	 * @param node - the node from which recursion starts.
-	 * @param key - a key we are searching for.
-	 * 
-	 * @return true if the specified key is in this map, 
-	 * 			otherwise false
-	 */
-	public boolean containsKey(Node<K, V> node, K key) {
-		if (node == null) {
-			return false;
-		}
-
-		int comp = this.COMPARATOR.compare(node.key, key);
-
-		if (comp == 0) {
-			return true;
-		}
-
-		if (comp < 0) {
-			return this.containsKey(node.left, key);
-		} else if (comp > 0) {
-			return this.containsKey(node.right, key);
-		}
-
-		return false;
-
+		return this.get(key) != null;
 	}
 
 
@@ -406,7 +392,13 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		return listOfKeyKs;
 	}
 
-	// TODO: add header
+	/**
+	 * This is a private recursive helper method that adds sorted kyes to a given 
+	 * array starting from a ceratin node.
+	 * 
+	 * @param node starting node of a recursion 
+	 * @param listOfKeyKs to which array key will be added.
+	 */
 	private void addKeys(Node<K, V>node, List<K> listOfKeyKs) {
 		if (node == null) {
 			return;
